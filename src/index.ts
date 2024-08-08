@@ -2,9 +2,10 @@ import express, { Application, Request, Response } from 'express'
 import morgan from 'morgan'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
-
+import config from './config'
 import errorMiddleware from './middleware/error.middleware'
-const PORT = 3000
+import db from './database'
+const PORT = config.port || 3000
 // create an instance server
 const app: Application = express()
 // Middleware to parses incoming requests with JSON payloads and is based on body-parser.
@@ -23,7 +24,7 @@ app.use(
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
     message: 'el3b b3ed ya ro7 mama',
-  })
+  }),
 )
 // add routing for / path
 app.get('/', (req: Request, res: Response) => {
@@ -35,9 +36,23 @@ app.get('/', (req: Request, res: Response) => {
 //post
 app.post('/', (req: Request, res: Response) => {
   res.json({
-      message: 'Hello World 🌍 from post',
-      data: req.body
+    message: 'Hello World 🌍 from post',
+    data: req.body,
   })
+})
+
+//test DB  connection
+db.connect().then((client) => {
+  return client
+    .query('SELECT NOW()')
+    .then((res) => {
+      client.release()
+      console.log(res.rows)
+    })
+    .catch((err) => {
+      client.release()
+      console.error('Connection error:', err.stack)
+    })
 })
 
 // error handler middleware
