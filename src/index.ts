@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit'
 import config from './config'
 import errorMiddleware from './middleware/error.middleware'
 import db from './database'
+import routes from './routes'
 const PORT = config.port || 3000
 // create an instance server
 const app: Application = express()
@@ -26,6 +27,8 @@ app.use(
     message: 'el3b b3ed ya ro7 mama',
   }),
 )
+
+app.use('/api', routes)
 // add routing for / path
 app.get('/', (req: Request, res: Response) => {
   res.json({
