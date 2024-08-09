@@ -41,19 +41,19 @@ app.post('/', (req: Request, res: Response) => {
   })
 })
 
-//test DB  connection
-db.connect().then((client) => {
-  return client
-    .query('SELECT NOW()')
-    .then((res) => {
-      client.release()
-      console.log(res.rows)
-    })
-    .catch((err) => {
-      client.release()
-      console.error('Connection error:', err.stack)
-    })
-})
+// //test DB  connection
+// db.connect().then((client) => {
+//   return client
+//     .query('SELECT NOW()')
+//     .then((res) => {
+//       client.release()
+//       console.log(res.rows)
+//     })
+//     .catch((err) => {
+//       client.release()
+//       console.error('Connection error:', err.stack)
+//     })
+// })
 
 // error handler middleware
 app.use(errorMiddleware)
